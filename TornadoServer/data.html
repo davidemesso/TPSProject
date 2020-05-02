@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--JQuery UI-->
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<!--DataTables-->
+		<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.datatables.net/1.10.20/js/dataTables.jqueryui.min.js"></script>
+		<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+		<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.jqueryui.min.js"></script>
+		<script src='{{static_url("js/DataTable.js")}}'></script>
+		<!--Chart-->
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+		<script src='{{static_url("js/SensorGraph.js")}}'></script>
+		<script src='{{static_url("js/dataPage.js")}}'></script>
+		<!--Map-->
+		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+		<script src='{{static_url("js/Map.js")}}'></script>
+		<script src='{{static_url("js/WSHandler.js")}}'></script>
+
+		<!--JQuery UI-->
+		<link rel="stylesheet" href='{{static_url("jquery/jquery-ui.css")}}'>
+		<!--DataTables-->
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.jqueryui.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.jqueryui.min.css">
+		<!--Map-->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css">
+
+		<title>Websocket Data monitor</title>
+	</head>
+
+	<body>
+		<div id="mapContainer" style="height:250px"></div>
+		<div id="popup" class="ol-popup">
+			<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+			<div id="popup-content"></div>
+		</div>
+
+		<h3>Real time data</h3>
+		<div style="display: inline-flex">
+			<span style="width: 420px !important; height: 300px !important">
+				<canvas id="temperatureChart"></canvas>
+				Temperature
+			</span>
+			<span style="width: 420px !important; height: 300px !important">
+				<canvas id="pressureChart"></canvas>
+				Pressure
+			</span>
+			<span style="width: 420px !important; height: 300px !important">
+				<canvas id="humidityChart"></canvas>
+				Humidity
+			</span>
+		</div>
+		<div id="realtimeData">
+			<table id="realtimeDataTable" class="nowrap display hover stripe" style="width:100%">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Time</th>
+						<th>Latitude</th>
+						<th>Longitude</th>
+						<th>Pressure</th>
+						<th>Temperature</th>
+						<th>Humidity</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+
+		<h4>Request storic data</h4>
+		<p>Start date: <input class="datepicker" type="text" id="startDatePicker"></p>
+		<p>End date: <input class="datepicker" type="text" id="endDatePicker"></p>
+		<button onclick="sendStoricDataRequest()">Get data</button>
+		<div id="tableContainer">
+			<h3 
+				style="display: inline-block; padding-right: 50px;"> 
+				Storic data 
+			</h3>
+			<button onclick="closeStoricDataField()">Close</button>
+			<table id="dataTable" class="nowrap display hover stripe" style="width:100%">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Time</th>
+						<th>Pressure</th>
+						<th>Temperature</th>
+						<th>Humidity</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</body>
+</html>

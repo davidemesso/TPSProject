@@ -1,0 +1,17 @@
+create database iotdatabase;
+
+create table sensorData(
+    id int(4) not null primary key,
+    lat decimal(11,7),
+    lng decimal(11,7),
+    topic varchar(50)
+);
+
+create table iotData(
+    id int(4) not null, FOREIGN KEY (id) REFERENCES sensorData(id),
+    time datetime not null,
+    press decimal(7,2),
+    temp decimal(5,2),
+    hum int(3),
+    primary key(id, time)
+);
