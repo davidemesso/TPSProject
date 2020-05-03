@@ -22,15 +22,25 @@ class SensorGraph
 
     plotData(data, value)
     {
-        let timestamp = this.getTimestamp(data);
-        let color = this.getRandomColorString();
+        this.initSensorIfNew(data.id);
+        this.updateDatasets(data, value);
+        this.updateChart();
+    }
 
-        if(!this.sensorList.includes(data.id))
+    initSensorIfNew(id)
+    {
+        let sensorExists = this.sensorList.includes(id) 
+        if(!sensorExists)
         {
-            this.sensorList.push(data.id);
-            this.colorForSensor[data.id] = color;
-            this.dataList[data.id] = [];
+            this.sensorList.push(id);
+            this.colorForSensor[id] = this.getRandomColorString();
+            this.dataList[id] = [];
         }
+    }
+
+    updateDatasets(data, value)
+    {
+        let timestamp = this.getTimestamp(data);
 
         this.timeList.push(timestamp);
         this.dataList[data.id].push({x: timestamp, y: value});
@@ -46,7 +56,10 @@ class SensorGraph
             ],
             borderWidth: 1
         }					
-        
+    }
+
+    updateChart()
+    {
         this.chart.data.labels = this.timeList;
         this.chart.data.datasets = $.map(this.datasets, function(value, i) {
             return [value];
@@ -54,6 +67,7 @@ class SensorGraph
         this.chart.update();
     }
 
+    
     getTimestamp(data)
     {
         let d = new Date(0);
