@@ -37,7 +37,7 @@ Consult [WS packets format](#WS-packets-format)
 
 ### Data Format
 This is the format of data sent to MQTT broker
-```JSON
+```
 {
   "id": dddd, 
   "time": epochFormat, 
