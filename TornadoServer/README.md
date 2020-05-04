@@ -22,10 +22,7 @@ It's necessary to identify different types of packet in order to handle requests
  RealTimeData
  {
    "type" : "RealTimeData",
-   "payload" : 
-     { 
-       "data": {} 
-     }
+   "payload" : {}
  }
  
  ServerHandshake
