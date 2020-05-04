@@ -1,4 +1,4 @@
-# Database Scheme
+# Tornado server
 
 #### This server handle communication between backend script (so MQTT with data) and the user, showing them data using web pages
 
