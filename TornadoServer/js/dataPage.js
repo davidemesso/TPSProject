@@ -88,8 +88,11 @@ function sendStoricDataRequest()
     let endTime = $("#endDatePicker").val();
 
     let message = {
-        startTime: startTime,
-        endTime: endTime
+        type : "StoricDataRequest",
+        payload:{
+            startTime: startTime,
+            endTime: endTime
+        }
     }
     
     if(startTime && endTime)

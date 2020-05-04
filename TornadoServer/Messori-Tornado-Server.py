@@ -2,6 +2,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 import time
+import json
 from tornado import gen
 
 class MainHandler(tornado.web.RequestHandler):
@@ -14,20 +15,47 @@ class DataHandler(tornado.web.RequestHandler):
 
 class DataWsHandler(tornado.websocket.WebSocketHandler):
 	connections = []
+	server = None
+	lastRequest = 0
+	requestDict = {}
 	
 	def open(self):
 		print("ws connected")
 		self.connections.append(self)
 
 	def on_message(self, message):
-		print("msg received")
-		for connection in self.connections:
-			if connection is not self:
-				connection.write_message(message)
+		packet = json.loads(message)
+		print(packet)
+		if packet['type'] == "RealTimeData":
+			self.realTimeData(packet['payload'])
+		elif packet['type'] == "ServerHandshake":
+			DataWsHandler.server = self
+		elif packet['type'] == "StoricDataRequest":
+			self.storicDataRequest(packet['payload'])
+		elif packet['type'] == "StoricDataServe":
+			self.storicDataServe(packet['payload'])
 
 	def on_close(self):
 		print("ws disconnected")
 		self.connections.remove(self)
+
+	def realTimeData(self, message):
+		for connection in self.connections:
+			if connection is not self:
+				connection.write_message(message)
+
+	def storicDataRequest(self, message):
+		self.lastRequest+=1
+		packet = message 
+		packet['id'] = self.lastRequest
+		packet = json.dumps(packet)
+		DataWsHandler.server.write_message(packet)
+		self.requestDict[self.lastRequest] = self
+
+	def storicDataServe(self, message):
+		packet = json.dumps(message['data'])
+		self.requestDict[message['id']].write_message(packet)
+		self.requestDict[message['id']] = None
 
 class TornadoServer:
 	def __init__(self, port):
