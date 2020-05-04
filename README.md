@@ -29,13 +29,13 @@ Consult [Data Format](#Data-format)
 [This script](Messori-Backend-Data-Handler.py) must subscribe to MQTT topics where the data were sent, then it stores them into MySQL server and send in real time via WebSocket to Tornado server.
 This script also handle on the same WS channel incoming request of storic data, sending the SELECT query result back to the client
 
-More information about SQL server [here](/DatabaseScheme)
+More information about SQL server [here](/DatabaseScheme/README.md)
 
 ## Tornado server part
 
 The server provides a web page usefull to visualize and plot the real time data coming from sensors, it also provide a GUI to select starting date and ending date for a storic data request
 
-Consult [WS packets format](#WS-packets-format)
+Consult [WS packets format](TornadoServer/README.md#WS-packets-format)
 
 More information about Tornado server [here](/TornadoServer)
 
@@ -53,6 +53,3 @@ This is the format of data sent to MQTT broker
 }
 ```
 Note: this can be slightly modified for different packets payload in ws communication, this standard is related only to MQTT communication
-
-### WS packets format
-TO BE IMPLEMENTED 
