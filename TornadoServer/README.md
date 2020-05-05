@@ -4,8 +4,6 @@
 
 Communication uses WebSocket protocol to tranfer data, there is a single bidirectional channel backend-tornado and multiple bidirection channels tornado-webpage one for every instance of the page open
 
-Consult [WS packet format](#WS-packet-format)
-
 ### WS packets format
 
 It's necessary to identify different types of packet in order to handle requests
