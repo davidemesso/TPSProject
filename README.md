@@ -19,10 +19,11 @@ In this project:
 
 ## Sensor part
 
-Where the data are acquired, it could be done by real sensors and sent on serial port by [MSP430 program](), or it could be simulated by a [python script](Messori-IoT.py).
+Where the data are acquired, it could be done by real sensors and sent on serial port by [MSP430 program](/MSPRealData/BMESensorData/main.c), or it could be simulated by a [python script](Messori-IoT.py).
 Data must be sent in MQTT to a broker, which temporally handle the communication between sensors and backend script.
+More information about the real data part [here](/MSPRealData/README.md)
 
-Consult [Data Format](#Data-format)
+Consult [Data format](#Data-format)
 
 ## Backend script part
 
