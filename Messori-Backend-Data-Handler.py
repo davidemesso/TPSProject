@@ -47,6 +47,15 @@ class wsMessageReceiverThread(threading.Thread):
         self.mySQLHandler = mySQLHandler
         self.wsHandler = wsHandler
 
+        self.sendServerHandshake()
+
+    def sendServerHandshake(self):
+        message = { "type": "ServerHandshake" }
+        try:
+            self.wsHandler.send(json.dumps(message))
+        except:
+            print("Tornado is not connected")
+
     def run(self):
         self.receiveDataWS()
 
@@ -68,7 +77,14 @@ class wsMessageReceiverThread(threading.Thread):
                         "temp" : str(el[3]),
                         "hum"  : str(el[4])
                     })
-                self.wsHandler.send(json.dumps(formattedData))
+                packet = {
+                    "type" : "StoricDataServe",
+                    "payload" : {
+                        "data" : formattedData,
+                        "id" : data['id']
+                    }
+                }
+                self.wsHandler.send(json.dumps(packet))
             except:
                 print('Connection closed')
                 break;
@@ -150,7 +166,11 @@ class MQTTSubscriber:
 
     def sendDataToTornado(self, data):
         try:
-            self.wsHandler.send(str(data))
+            packet = {
+                "type" : "RealTimeData",
+                "payload" : str(data)
+            }
+            self.wsHandler.send(json.dumps(packet))
         except:
             self.wsHandler.close()
             print("error sending data")
