@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--JQuery UI-->
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<!--DataTables-->
+		<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.datatables.net/1.10.20/js/dataTables.jqueryui.min.js"></script>
+		<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+		<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.jqueryui.min.js"></script>
+		<script src='{{static_url("js/DataTable.js")}}'></script>
+		<script src='{{static_url("js/sensorsPage.js")}}'></script>
+		<!--Map-->
+		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+		<script src='{{static_url("js/Map.js")}}'></script>
+		<script src='{{static_url("js/WSHandler.js")}}'></script>
+
+		<!--JQuery UI-->
+		<link rel="stylesheet" href='{{static_url("jquery/jquery-ui.css")}}'>
+		<!--DataTables-->
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.jqueryui.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.jqueryui.min.css">
+		<!--Map-->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css">
+
+		<title>Sensors monitor</title>
+	</head>
+
+	<body>
+		<button class="ui-button ui-widget ui-corner-all" 
+			id="backButton"
+			style="padding: 8px; margin-bottom: 16px;"
+			onclick="window.location.href='./'">
+		</button>
+
+		<div id="mapContainer" style="height:250px"></div>
+
+		<div id="sensorsData" style="padding-top: 40px">
+			<table id="sensorsDataTable" class="nowrap display hover stripe" style="width:100%">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Latitude</th>
+						<th>Longitude</th>
+						<th>Topic</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+
+	</body>
+</html>

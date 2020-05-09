@@ -3,6 +3,7 @@ class Map
     constructor() 
     {
         this.ostMap = {};
+        this.ostMap.markers = []
 
         this.ostMap.map = L.map('mapContainer');
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
@@ -13,9 +14,15 @@ class Map
 
     createMarker()
     {
-        this.ostMap.marker = L
+        return L
             .marker([0, 0])
             .addTo(this.ostMap.map);
+    }
+
+    markPositions(list, zoom)
+    {
+        for(let el of list)
+            this.markPosition(el, zoom);
     }
 
     markPosition(data, zoom)
@@ -23,15 +30,19 @@ class Map
         let id = data.id;
         let lat = data.lat;
         let long = data.long;
+        let topic = data.topic
+
+        let marker = this.createMarker();
 
         this.ostMap
             .map
             .setView([lat, long], zoom);
     
-        this.ostMap
-            .marker
+        marker
             .setLatLng([lat, long])
-            .bindPopup("ID: " + id)
+            .bindPopup("ID: " + id + "<br>Topic: " + topic)
             .openPopup();
+
+        this.ostMap.markers.push(marker);
     }
 }

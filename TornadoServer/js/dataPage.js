@@ -4,9 +4,6 @@ var realTimeTable = null;
 var temperatureChart = null;
 var pressureChart    = null;
 var humidityChart    = null;
-
-var map = null;
-
 var ws = null;
 
 // Callback to when the page is fully loaded, used to setup the whole page
@@ -14,7 +11,6 @@ $(document).ready(() => {
     initJQueryComponents();
     initTables();
     initCharts();
-    initMap();
     initWS();
 });
 
@@ -22,6 +18,12 @@ function initJQueryComponents()
 {
     $('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd'
+    });
+
+    $("#backButton").button({
+        icons: {
+            primary: "ui-icon-triangle-1-w"
+        }
     });
 }
 
@@ -48,11 +50,6 @@ function initCharts()
     humidityChart    = new SensorGraph("humidityChart");
 }
 
-function initMap()
-{
-    map = new Map();
-}
-
 function initWS()
 {
     ws = new WSHandler("ws://localhost:8888/data/ws", wsOnMessage);
@@ -68,8 +65,6 @@ function wsOnMessage(evt) {
         humidityChart.plotData(data, data.hum);
 
         realTimeTable.addData(data);
-
-        map.markPosition(data, 15);
     }
     else 
         showStoricDataField(data);
@@ -78,8 +73,8 @@ function wsOnMessage(evt) {
 function showStoricDataField(data)
 {
     $("#tableContainer").show();
-        storicTable.clear();
-        storicTable.addList(data)
+    storicTable.clear();
+    storicTable.addList(data)
 }
 
 function sendStoricDataRequest()
@@ -89,7 +84,7 @@ function sendStoricDataRequest()
 
     let message = {
         type : "StoricDataRequest",
-        payload:{
+        payload: {
             startTime: startTime,
             endTime: endTime
         }

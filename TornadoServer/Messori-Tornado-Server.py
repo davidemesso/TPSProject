@@ -13,6 +13,10 @@ class DataHandler(tornado.web.RequestHandler):
 	def get(self):
 		self.render("data.html")
 
+class SensorsHandler(tornado.web.RequestHandler):
+	def get(self):
+		self.render("sensors.html")
+
 class DataWsHandler(tornado.websocket.WebSocketHandler):
 	connections = []
 	server = None
@@ -25,14 +29,17 @@ class DataWsHandler(tornado.websocket.WebSocketHandler):
 
 	def on_message(self, message):
 		packet = json.loads(message)
-		print(packet)
 		if packet['type'] == "RealTimeData":
 			self.realTimeData(packet['payload'])
 		elif packet['type'] == "ServerHandshake":
 			DataWsHandler.server = self
 		elif packet['type'] == "StoricDataRequest":
-			self.storicDataRequest(packet['payload'])
+			self.storicDataRequest(packet)
 		elif packet['type'] == "StoricDataServe":
+			self.storicDataServe(packet['payload'])
+		elif packet['type'] == "SensorsDataRequest":
+			self.sensorsDataRequest(packet)
+		elif packet['type'] == "SensorsDataServe":
 			self.storicDataServe(packet['payload'])
 
 	def on_close(self):
@@ -47,12 +54,25 @@ class DataWsHandler(tornado.websocket.WebSocketHandler):
 	def storicDataRequest(self, message):
 		self.lastRequest+=1
 		packet = message 
-		packet['id'] = self.lastRequest
+		packet['payload']['id'] = self.lastRequest
 		packet = json.dumps(packet)
 		DataWsHandler.server.write_message(packet)
 		self.requestDict[self.lastRequest] = self
 
 	def storicDataServe(self, message):
+		packet = json.dumps(message['data'])
+		self.requestDict[message['id']].write_message(packet)
+		self.requestDict[message['id']] = None
+
+	def sensorsDataRequest(self, message):
+		self.lastRequest+=1
+		packet = message 
+		packet['payload']['id'] = self.lastRequest
+		packet = json.dumps(packet)
+		DataWsHandler.server.write_message(packet)
+		self.requestDict[self.lastRequest] = self
+
+	def sensorsDataServe(self, message):
 		packet = json.dumps(message['data'])
 		self.requestDict[message['id']].write_message(packet)
 		self.requestDict[message['id']] = None
@@ -65,6 +85,7 @@ class TornadoServer:
 		handlers = [
 			(r"/", MainHandler),
 			(r"/data", DataHandler),
+			(r"/sensors", SensorsHandler),
 			(r"/data/ws", DataWsHandler)
 		]
 
